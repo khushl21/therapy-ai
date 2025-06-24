@@ -16,15 +16,14 @@ app.add_middleware(
 @app.post("/chat")
 async def chat(request: Request):
     data = await request.json()
-    user_message = data["message"]
+    prompt = data["prompt"]
 
-    full_prompt = f"User: {user_message}\nTherapist:"
+    
 
     response = requests.post("http://localhost:11434/api/generate", json={
         "model": "therapy",
-        "prompt": full_prompt,
+        "prompt": prompt,
         "stream": False
     })
 
-    result = response.json()["response"]
-    return {"reply": result}
+    return {"reply": response.json()["response"]}
