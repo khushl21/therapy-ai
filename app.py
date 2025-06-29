@@ -1,41 +1,59 @@
 import streamlit as st
 import requests
 
-st.set_page_config(page_title="AI Therapist", page_icon="🧠")
+# ---- Page Setup ----
+st.set_page_config(
+    page_title="AI Therapist",
+    page_icon="🧠",
+    layout="centered",  # better for mobile
+    initial_sidebar_state="collapsed",
+)
 
-# Initialize chat history
+# ---- Styling ----
+st.markdown("""
+    <style>
+    .stChatMessage { padding: 1rem; border-radius: 1.25rem; margin-bottom: 0.5rem; }
+    .stChatMessage.user { background-color: #DCF8C6; text-align: right; }
+    .stChatMessage.assistant { background-color: #F1F0F0; }
+    .block-container { padding-top: 2rem; padding-bottom: 2rem; }
+    textarea { font-size: 1rem !important; }
+    </style>
+""", unsafe_allow_html=True)
+
+# ---- Chat Memory ----
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
 
-st.title("🧠 AI Therapist Chat")
+st.title("🧠 AI Therapist")
 
-st.markdown("Talk to a supportive AI therapist trained in CBT. This is not medical advice.")
+st.markdown(
+    "Talk to a supportive AI therapist trained in CBT techniques. This is for emotional support only — not medical advice."
+)
 
-# Display previous messages
+# ---- Display Chat ----
 for msg in st.session_state.messages:
-    if msg["role"] == "user":
-        st.chat_message("user").write(msg["content"])
-    else:
-        st.chat_message("assistant").write(msg["content"])
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
 
-# Input box
+# ---- User Input ----
 if prompt := st.chat_input("How are you feeling today?"):
-    # Add user message to chat history
+    # Show user message
     st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user").write(prompt)
+    with st.chat_message("user"):
+        st.markdown(prompt)
 
-    # Send full chat history to backend
-    history_for_model = "\n".join(
+    # Format prompt history for backend
+    history_prompt = "\n".join(
         [f"User: {m['content']}" if m["role"] == "user" else f"Therapist: {m['content']}"
          for m in st.session_state.messages]
-    )
-    history_for_model += "\nTherapist:"
+    ) + "\nTherapist:"
 
-    # Call backend
+    # Send to backend
     with st.spinner("Thinking..."):
-        res = requests.post("http://localhost:8000/chat", json={"prompt": history_for_model})
+        res = requests.post("http://localhost:8000/chat", json={"prompt": history_prompt})
         reply = res.json()["reply"]
 
-    # Add response to history and display it
+    # Show therapist reply
     st.session_state.messages.append({"role": "assistant", "content": reply})
-    st.chat_message("assistant").write(reply)
+    with st.chat_message("assistant"):
+        st.markdown(reply)
