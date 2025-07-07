@@ -1,0 +1,68 @@
+.app-container {
+  max-width: 80vw;
+  margin: auto;
+  padding: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: #3b3b3b;
+  color: #cccccc;
+  font-size: 16px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.chat-box {
+  height: 80vh;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.user-msg {
+  background: #dcf8c6;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 15px;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.bot-msg {
+  background: #f1f0f0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 15px;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.input-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+input {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
